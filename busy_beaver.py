@@ -82,7 +82,15 @@ class BusyBeaver:
            with the same structure.
         """
 
-        # TODO
+        self.nstates = nstates
+        self.tape_length = tape_length
+        self.tape = [0 for i in range(self.tape_length)]
+        self.current_position = self.tape_length // 2
+        self.current_state = 0
+        if contents:
+            self.contents = contents
+        else:
+            self.contents = self.generate_random_contents()
 
     def verify_state_info(self, state_info):
         """

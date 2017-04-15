@@ -10,6 +10,19 @@ of 1's before stopping, starting from an empty tape.
 
 import random
 import string
+import time
+from functools import wraps
+
+
+def timethis(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        start = time.perf_counter()
+        r = func(*args, **kwargs)
+        end = time.perf_counter()
+        print('{}.{} : {}'.format(func.__module__, func.__name__, end-start))
+        return r
+    return wrapper
 
 
 DELTA_ONES = {(0, 0): 0, (0, 1): 1, (1, 0): -1, (1, 1): 0}
@@ -210,6 +223,7 @@ class BusyBeaver:
 
         return (halt_flag, DELTA_ONES[(current_read, current_transition[0])])
 
+    @timethis
     def run(self, check=1000000, silent=False):
         """
         Start the tape and run it until it halts.
@@ -241,7 +255,7 @@ if __name__ == "__main__":
     bb = BusyBeaver(5, 20000)
     bb.load("bb.in")
     bb.print_contents()
-    bb.run()
+    bb.run(silent=True)
     # bb.print_tape()
     print("Number of 1s printed: %d" % bb.count_ones())
     bb.save("bb.out")

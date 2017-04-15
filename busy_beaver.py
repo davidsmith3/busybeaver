@@ -8,7 +8,8 @@ of 1's before stopping, starting from an empty tape.
 
 """
 
-import random, string
+import random
+import string
 
 
 # Exception classes.
@@ -20,12 +21,14 @@ class InvalidTuringMachineState(Exception):
     """
     pass
 
+
 class InvalidTuringMachine(Exception):
     """
     This exception class is raised if a Turing Machine
     is improperly initialized.
     """
     pass
+
 
 class TuringMachineRuntimeError(Exception):
     """
@@ -37,6 +40,7 @@ class TuringMachineRuntimeError(Exception):
     -- insufficient progress after a certain number of steps
     """
     pass
+
 
 class TuringMachineIOError(Exception):
     """
@@ -80,7 +84,6 @@ class BusyBeaver:
 
         # TODO
 
-
     def verify_state_info(self, state_info):
         """
         Verify the information about a particular Turing Machine
@@ -89,7 +92,6 @@ class BusyBeaver:
         """
 
         # TODO
-
 
     def generate_random_contents(self):
         """
@@ -101,14 +103,12 @@ class BusyBeaver:
 
         # TODO
 
-
     def save(self, filename):
         """
         Save the contents of the Turing machine to a file.
         """
 
         # TODO
-
 
     def load(self, filename):
         """
@@ -117,7 +117,6 @@ class BusyBeaver:
 
         # TODO -- MAKE SURE you verify the contents of the Turing
         # machine after you load it!
-
 
     def print_contents(self):
         """
@@ -131,7 +130,6 @@ class BusyBeaver:
         # i.e. annotate the contents with a description of what they
         # represent.
 
-
     def print_tape(self, ncolumns=70):
         """
         Prints out the tape of the Turing machine with 'ncolumns'
@@ -142,12 +140,10 @@ class BusyBeaver:
 
         # TODO
 
-
     def count_ones(self):
         """Count the number of ones on the tape."""
 
         # TODO
-
 
     def step(self):
         """
@@ -161,7 +157,6 @@ class BusyBeaver:
         """
 
         # TODO
-
 
     def run(self, check=1000000, silent=False):
         """
@@ -184,8 +179,5 @@ if __name__ == "__main__":
     bb.print_contents()
     bb.run()
     # bb.print_tape()
-    print "Number of 1s printed: %d" % bb.count_ones()
+    print("Number of 1s printed: %d" % bb.count_ones())
     bb.save("bb.out")
-
-
-

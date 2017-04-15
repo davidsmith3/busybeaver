@@ -12,7 +12,10 @@ import random
 import string
 
 
+DELTA_ONES = {(0, 0): 0, (0, 1): 1, (1, 0): -1, (1, 1): 0}
+
 # Exception classes.
+
 
 class InvalidTuringMachineState(Exception):
     """
@@ -148,10 +151,10 @@ class BusyBeaver:
         """
 
         for i, state in enumerate(self.contents):
-            left, right = state
-            left_text = self.get_transition_string(left)
-            right_text = self.get_transition_string(right)
-            print('{:<3}: {} | {}'.format(i, left_text, right_text))
+            zero, one = state
+            zero_text = self.get_transition_string(zero)
+            one_text = self.get_transition_string(one)
+            print('{:<3}: {} | {}'.format(i, zero_text, one_text))
         # TODO -- Make sure the printout is in a human-readable form
         # i.e. annotate the contents with a description of what they
         # represent.
@@ -166,10 +169,13 @@ class BusyBeaver:
 
         # TODO
 
+    def print_current_state(self, steps):
+        print('STEP:{} POS:{} ST:{} VAL:{} 1S:{}'.format(steps, self.current_position, self.current_state, self.tape[self.current_position], self.count_ones()))
+
     def count_ones(self):
         """Count the number of ones on the tape."""
 
-        # TODO
+        return sum(self.tape)
 
     def step(self):
         """
@@ -182,7 +188,27 @@ class BusyBeaver:
                    (x = count increment as above)
         """
 
-        # TODO
+        # Read current positon
+        current_read = self.tape[self.current_position]
+
+        # Write to cell based on transition table
+        current_transition = self.contents[self.current_state][current_read]
+        self.tape[self.current_position] = current_transition[0]
+
+        # Move to new position
+        self.current_position = self.current_position + current_transition[1]
+        if self.current_position < 0 or self.current_position >= len(self.tape):
+            raise TuringMachineRuntimeError('ran off edge of tape')
+
+        # Transition to a new state
+        self.current_state = current_transition[2]
+
+        if self.current_state == -1:
+            halt_flag = 1
+        else:
+            halt_flag = 0
+
+        return (halt_flag, DELTA_ONES[(current_read, current_transition[0])])
 
     def run(self, check=1000000, silent=False):
         """
@@ -192,7 +218,19 @@ class BusyBeaver:
         If 'silent' is True, don't print out anything during the run.
         """
 
-        # TODO
+        result = (0, 0)
+        t_num_ones = self.count_ones()
+        steps = 0
+        while not result[0]:
+            if (not silent) and ((steps % 1000000) == 0):
+                self.print_current_state(steps)
+            result = self.step()
+            if (steps % check) == 0:
+                if t_num_ones == self.count_ones():
+                    raise(TuringMachineRuntimeError('insufficient progress'))
+                else:
+                    t_num_ones = self.count_ones
+            steps = steps + 1
 
 
 #

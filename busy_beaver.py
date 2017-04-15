@@ -123,8 +123,21 @@ class BusyBeaver:
         Load the contents of the Turing machine from a file.
         """
 
+        with open(filename, 'rt') as f:
+            t_contents = []
+            for line in f:
+                line = line.replace('L', '-1')
+                line = line.replace('R', '1')
+                vals = line.split()
+                vals = [int(val) for val in vals]
+                t_contents.append((tuple(vals[0:3]), tuple(vals[3:6])))
+        self.contents = t_contents
+
         # TODO -- MAKE SURE you verify the contents of the Turing
         # machine after you load it!
+
+    def get_transition_string(self, transition):
+        return '({:>2} {:>2} {:>2})'.format(*transition)
 
     def print_contents(self):
         """
@@ -134,6 +147,11 @@ class BusyBeaver:
         but not the contents of the tape.
         """
 
+        for i, state in enumerate(self.contents):
+            left, right = state
+            left_text = self.get_transition_string(left)
+            right_text = self.get_transition_string(right)
+            print('{:<3}: {} | {}'.format(i, left_text, right_text))
         # TODO -- Make sure the printout is in a human-readable form
         # i.e. annotate the contents with a description of what they
         # represent.
